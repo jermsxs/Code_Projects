@@ -1,0 +1,217 @@
+AppMain.java
+Last week
+Jul 16
+Erick Chavez uploaded an item
+Java
+AppMain.java
+
+//Created in 1hr and 16 mins
+
+import java.util.Random;
+
+public class AppMain {
+	
+	private int money = 0, day = 0, week = 0, month = 0;
+	
+////////////////////////Edit Here//////////////////////////////
+	/*Apps GO Up Here*/     /*(Price,Ads On)*/
+	App exampleApp1 = new App(1, false); //First Type of App 
+	
+	                           /*(Price, Ads On, Team, Percenatge You Earn)*/
+	App exampleApp2 = new App(0, true, true, 50); //Second Type of App   (Third Variable should always be true else might create errors)
+	                                   
+	/*Earn Money Method*/ 
+	private void addMoney() {
+		
+		exampleApp1.Sales();
+		this.money = this.money + exampleApp1.getMoneyEarned();
+		
+		exampleApp2.Sales();
+		this.money = this.money + exampleApp2.getMoneyEarned();
+		
+	}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	
+///////////////////////CODE//////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//Time Method
+	private void Time() {
+		for(int maxTime = 8;day <= maxTime; day++) {
+			addMoney();
+		}
+		
+		if(day >= 7) {
+			day = 0;
+			week = week + 1;
+		}
+		if(week >= 4) {
+			month = month + 1;
+			week = 0;
+			System.out.println("Month "+month);
+			System.out.println("Money "+money);
+		}
+	}
+	
+	
+	
+	private void appMethod() {
+		Time();
+	}
+	
+	//Constructor
+	public AppMain() {
+		try {
+			appMethod();
+		}catch(Exception e){
+			e.getMessage();
+			System.out.println("NOT WORKING");
+		}
+	}
+
+	//Main Method
+	public static void main(String[] args) {
+		AppMain a = new AppMain();
+		
+		//Timed Loop
+		int fps = 120;
+		double timePerTick = 1000000000 / fps;
+		double delta = 0;
+		long now;
+		long lastTime = System.nanoTime();
+		long timer = 0;
+		@SuppressWarnings("unused")
+		int ticks = 0;
+		
+		while(true)
+		{
+			now = System.nanoTime();
+			delta += (now - lastTime) / timePerTick;
+			timer += now - lastTime;
+			lastTime = now;
+			
+			if(delta >= 1){
+			ticks++;
+			delta--;
+			}
+			if(timer >= 1000000000)
+			{
+				a.appMethod();
+				
+				ticks = 0;
+				timer = 0;
+				
+			}
+		}
+	}
+}
+//App Class
+class App{
+	
+	Random rand = new Random();
+	
+	//Integers
+	private int moneyEarned = 0, price, popularity = 1, percentage, totalDownloads = 0;
+	@SuppressWarnings("unused")
+	private Boolean team, adsOn;
+	
+	//Constructer
+	public App(int price, Boolean adsOn) {	
+		this.price = price;
+		this.adsOn = adsOn;
+		
+	}
+	
+	//Sales Function
+	public void Sales() {
+		gameRevenue();
+		
+		if(adsOn) {
+			adRevenue();
+		}
+		
+		else {
+			return;
+		}
+	}
+	public void Sales(Boolean team) {
+		gameRevenue();
+		
+		if(adsOn) {
+			adRevenue();
+		}
+		if(team) {
+			moneyEarned = moneyEarned / percentage;
+		}
+		else {
+			return;
+		}
+	}
+
+	public App(int price, Boolean adsOn, Boolean team, int Percentage) {
+		this.price = price;
+		this.percentage = Percentage;
+		this.team = team;
+		this.adsOn = adsOn;
+		
+	}
+	private int popFunc(int popularity) {
+		int nextPop = popularity + 3;
+		
+		popularity = rand.nextInt(popularity + 4);
+		
+		if(popularity >= nextPop) {
+			popularity = popularity + 2;
+		}
+		
+		return popularity;
+	}
+	private void gameRevenue() {
+		int download = getRandomNumber(popFunc(popularity));
+
+		if(totalDownloads >= 1000) {
+			Boolean pirated = rand.nextBoolean();
+			if(pirated) {
+				this.moneyEarned = this.moneyEarned + (download * this.price) / 90;			
+				System.out.println("PIRATED");
+			}else {
+				
+				if(totalDownloads >= 1250) {
+					pirated=true;
+					if(pirated) {
+						this.moneyEarned = this.moneyEarned + (download * this.price) / 90;
+						System.out.println("PIRATED");
+
+					}
+				}
+			}
+		}else {
+			this.moneyEarned = this.moneyEarned + (download * this.price);
+		}
+		
+		totalDownloads = (totalDownloads + download);
+	}
+
+	private void adRevenue() {
+		int randBool = rand.nextInt(1);
+		
+		if(randBool== 1) {
+			this.moneyEarned = this.moneyEarned + 1;
+		}
+		else {
+			return;
+		}
+	}
+	private int getRandomNumber(int max) {
+		int randomNum = rand.nextInt(max + 1);
+		
+		return randomNum;
+	}
+
+	public int getMoneyEarned() {
+		return moneyEarned;
+	}
+
+	public void setMoneyEarned(int moneyEarned) {
+		this.moneyEarned = moneyEarned;
+	}
+}
